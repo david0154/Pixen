@@ -9,11 +9,48 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    body{background:#040d18;}
+    .nav-header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(4,13,24,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,174,239,.2);box-shadow:0 4px 30px rgba(0,0,0,.5);}
+    .nav-home-link{color:rgba(0,174,239,.85);text-decoration:none;font-size:14px;font-weight:500;padding:8px 16px;border:1px solid rgba(0,174,239,.3);border-radius:8px;transition:all .25s;}
+    .nav-home-link:hover{background:rgba(0,174,239,.1);border-color:rgba(0,174,239,.6);color:#00AEEF;}
+    .section{min-height:unset!important;padding:60px 7vw 80px!important;}
+    .section.dark{background:linear-gradient(180deg,rgba(0,174,239,.06) 0%,#040d18 15%,#040d18 100%)!important;}
+    .glass-card{background:rgba(255,255,255,.04)!important;border:1px solid rgba(0,174,239,.15)!important;box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 60px rgba(0,174,239,.04)!important;padding:48px!important;max-width:860px!important;}
+    .legal-content h2{font-size:clamp(1.8rem,3vw,2.5rem)!important;background:linear-gradient(135deg,#00AEEF,#fff 70%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px!important;}
+    .legal-content .last-updated{color:rgba(0,174,239,.6)!important;font-size:13px!important;letter-spacing:.5px;margin-bottom:32px!important;font-weight:500;}
+    .legal-content h3{color:#00AEEF!important;font-size:1.1rem!important;font-weight:700!important;margin:28px 0 10px!important;padding-bottom:6px;border-bottom:1px solid rgba(0,174,239,.15);}
+    .legal-content h4{color:rgba(255,255,255,.85)!important;font-size:.95rem!important;font-weight:600!important;margin:18px 0 6px!important;}
+    .legal-content p{color:rgba(255,255,255,.72)!important;line-height:1.75!important;font-size:.95rem!important;}
+    .legal-content ul,.legal-content ol{padding-left:20px;margin-bottom:16px;}
+    .legal-content ul li,.legal-content ol li{color:rgba(255,255,255,.65)!important;font-size:.9rem!important;line-height:1.7!important;margin-bottom:6px;}
+    .legal-content ul li::marker,.legal-content ol li::marker{color:rgba(0,174,239,.7);}
+    .legal-content a{color:#00AEEF!important;text-decoration:none;border-bottom:1px solid rgba(0,174,239,.3);transition:border-color .2s;}
+    .legal-content a:hover{border-color:#00AEEF;}
+    .highlight-box{background:linear-gradient(135deg,rgba(0,174,239,.12),rgba(0,112,209,.06));border:1px solid rgba(0,174,239,.25);border-radius:18px;padding:18px 20px;margin:24px 0 28px;box-shadow:0 10px 30px rgba(0,174,239,.08);}
+    .highlight-box strong{color:#fff;}
+    .contact-card,.steps-card{background:rgba(255,255,255,.03);border:1px solid rgba(0,174,239,.14);border-radius:18px;padding:22px;margin-top:18px;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+    @media (max-width:780px){.two-col{grid-template-columns:1fr;}.nav-header{padding:16px 20px;}.glass-card{padding:28px!important;}}
+    footer{padding:32px 7vw!important;border-top:1px solid rgba(0,174,239,.15)!important;background:rgba(4,13,24,.95)!important;}
+    .footer-inner{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+    .footer-logo,.footer-nav a{color:rgba(255,255,255,.7)!important;text-decoration:none;}
+    .footer-nav{display:flex;gap:16px;flex-wrap:wrap;}
+    .footer-nav a:hover{color:#00AEEF!important;}
+  </style>
 </head>
 <body>
   <header class="nav-header">
     <a href="index.html" class="nav-logo" aria-label="Pixen Home">
-      <img src="assets/logo.png" alt="Pixen" width="120" height="40" loading="eager" style="height:40px;width:auto;object-fit:contain;display:block;" />
+      <svg width="108" height="32" viewBox="0 0 108 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Pixen" style="display:block;height:32px;width:auto;">
+        <rect x="0" y="3" width="7" height="7" rx="1.5" fill="#00AEEF"/>
+        <rect x="9" y="3" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.65"/>
+        <rect x="0" y="12" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.65"/>
+        <rect x="9" y="12" width="7" height="7" rx="1.5" fill="#0070D1"/>
+        <rect x="0" y="21" width="7" height="7" rx="1.5" fill="#0070D1" opacity="0.4"/>
+        <rect x="9" y="21" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.35"/>
+        <text x="23" y="25" font-family="Outfit,sans-serif" font-weight="900" font-size="21" letter-spacing="-0.5" fill="white">PIXEN</text>
+      </svg>
     </a>
     <a href="index.html" class="nav-home-link">&larr; Back to Home</a>
   </header>
@@ -23,68 +60,66 @@
       <h2>Pixen Account Deletion Policy</h2>
       <p class="last-updated">Last Updated: June 2026</p>
 
-      <p>Pixen respects users&rsquo; rights to control their personal information. This Account Deletion Policy explains how users can request deletion of their Pixen account and associated data.</p>
+      <div class="highlight-box">
+        <strong>Account deletion request:</strong> You can request permanent deletion of your Pixen account and associated data through the app or by contacting support.
+      </div>
+
+      <p>Pixen respects users&rsquo; rights to control their personal information. This page explains how to request deletion of your account, what data may be removed, and what may be retained for legal or security reasons.</p>
 
       <h3>How to Delete Your Account</h3>
-
-      <h4>Option 1: Through the App</h4>
-      <ol>
-        <li>Open the Pixen app.</li>
-        <li>Go to <strong>Settings</strong>.</li>
-        <li>Select <strong>Account Settings</strong>.</li>
-        <li>Tap <strong>Delete Account</strong>.</li>
-        <li>Confirm the deletion request.</li>
-      </ol>
-
-      <h4>Option 2: By Email</h4>
-      <p>If you cannot access your account, send a deletion request to:</p>
-      <p>Email: <a href="mailto:pixen@nexuzy.in">pixen@nexuzy.in</a></p>
-      <p>Please include:</p>
-      <ul>
-        <li>Your registered email address or phone number.</li>
-        <li>Your Pixen username.</li>
-        <li>A brief request for account deletion.</li>
-      </ul>
+      <div class="two-col">
+        <div class="steps-card">
+          <h4>Option 1: Through the App</h4>
+          <ol>
+            <li>Open the Pixen app.</li>
+            <li>Go to <strong>Settings</strong>.</li>
+            <li>Select <strong>Account Settings</strong>.</li>
+            <li>Tap <strong>Delete Account</strong>.</li>
+            <li>Confirm the deletion request.</li>
+          </ol>
+        </div>
+        <div class="contact-card">
+          <h4>Option 2: By Email</h4>
+          <p>If you cannot access your account, send a deletion request to:</p>
+          <p>Email: <a href="mailto:pixen@nexuzy.in">pixen@nexuzy.in</a></p>
+          <p>Please include your registered email address or phone number, your Pixen username, and a short deletion request.</p>
+        </div>
+      </div>
 
       <h3>What Data Will Be Deleted</h3>
-      <p>Upon account deletion, the following information will be permanently removed from Pixen systems:</p>
+      <p>Upon account deletion, the following information may be permanently removed from Pixen systems:</p>
       <ul>
         <li>Profile information</li>
         <li>Photos and videos uploaded by you</li>
         <li>Posts and stories</li>
         <li>Comments and reactions</li>
-        <li>Messages (where technically feasible)</li>
+        <li>Messages, where technically feasible</li>
         <li>Account preferences</li>
         <li>Authentication information</li>
       </ul>
 
       <h3>Data Retention</h3>
-      <p>Certain information may be retained for a limited period when required for:</p>
-      <ul>
-        <li>Legal compliance</li>
-        <li>Fraud prevention</li>
-        <li>Security investigations</li>
-        <li>Enforcement of Terms &amp; Conditions</li>
-      </ul>
-      <p>Any retained information will be securely stored and deleted when no longer required.</p>
+      <p>Certain information may be retained for a limited period when required for legal compliance, fraud prevention, security investigations, or enforcement of Terms &amp; Conditions. Any retained information will be securely stored and deleted when no longer required.</p>
 
       <h3>Deletion Processing Time</h3>
-      <p>Most deletion requests are processed within <strong>30 days</strong> of verification.</p>
+      <div class="highlight-box">
+        <strong>Processing time:</strong> Most verified deletion requests are processed within <strong>30 days</strong>.
+      </div>
 
       <h3>Effect of Account Deletion</h3>
-      <p>Once your account is deleted:</p>
       <ul>
         <li>Your profile will no longer be visible.</li>
         <li>You will lose access to your account.</li>
         <li>Deleted data generally cannot be recovered.</li>
-        <li>Some content shared with other users may remain visible if required for system integrity.</li>
+        <li>Some content shared with other users may remain visible if required for system integrity or legal reasons.</li>
       </ul>
 
       <h3>Contact Us</h3>
-      <p>For questions regarding account deletion:</p>
-      <p><strong>Pixen Support</strong><br />
-      Email: <a href="mailto:pixen@nexuzy.in">pixen@nexuzy.in</a><br />
-      Developer: Nexuzy Lab</p>
+      <div class="contact-card">
+        <p><strong>Pixen Support</strong></p>
+        <p>Email: <a href="mailto:pixen@nexuzy.in">pixen@nexuzy.in</a></p>
+        <p>Developer: Nexuzy Lab</p>
+      </div>
 
       <p class="legal-acknowledgement">By using Pixen, you acknowledge and agree to this Account Deletion Policy.</p>
     </div>
