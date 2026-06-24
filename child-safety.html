@@ -9,11 +9,46 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    body{background:#040d18;}
+    .nav-header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(4,13,24,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,174,239,.2);box-shadow:0 4px 30px rgba(0,0,0,.5);}
+    .nav-home-link{color:rgba(0,174,239,.85);text-decoration:none;font-size:14px;font-weight:500;padding:8px 16px;border:1px solid rgba(0,174,239,.3);border-radius:8px;transition:all .25s;}
+    .nav-home-link:hover{background:rgba(0,174,239,.1);border-color:rgba(0,174,239,.6);color:#00AEEF;}
+    .section{min-height:unset!important;padding:60px 7vw 80px!important;}
+    .section.dark{background:linear-gradient(180deg,rgba(0,174,239,.06) 0%,#040d18 15%,#040d18 100%)!important;}
+    .glass-card{background:rgba(255,255,255,.04)!important;border:1px solid rgba(0,174,239,.15)!important;box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 60px rgba(0,174,239,.04)!important;padding:48px!important;max-width:860px!important;}
+    .legal-content h2{font-size:clamp(1.8rem,3vw,2.5rem)!important;background:linear-gradient(135deg,#00AEEF,#fff 70%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px!important;}
+    .legal-content .last-updated{color:rgba(0,174,239,.6)!important;font-size:13px!important;letter-spacing:.5px;margin-bottom:32px!important;font-weight:500;}
+    .legal-content h3{color:#00AEEF!important;font-size:1.1rem!important;font-weight:700!important;margin:28px 0 10px!important;padding-bottom:6px;border-bottom:1px solid rgba(0,174,239,.15);}
+    .legal-content h4{color:rgba(255,255,255,.85)!important;font-size:.95rem!important;font-weight:600!important;margin:18px 0 6px!important;}
+    .legal-content p{color:rgba(255,255,255,.72)!important;line-height:1.75!important;font-size:.95rem!important;}
+    .legal-content ul{padding-left:20px;margin-bottom:16px;}
+    .legal-content ul li{color:rgba(255,255,255,.65)!important;font-size:.9rem!important;line-height:1.7!important;margin-bottom:4px;}
+    .legal-content ul li::marker{color:rgba(0,174,239,.6);}
+    .legal-content a{color:#00AEEF!important;text-decoration:none;border-bottom:1px solid rgba(0,174,239,.3);transition:border-color .2s;}
+    .legal-content a:hover{border-color:#00AEEF;}
+    .alert-box{background:linear-gradient(135deg,rgba(0,174,239,.12),rgba(0,112,209,.06));border:1px solid rgba(0,174,239,.25);border-radius:18px;padding:18px 20px;margin:24px 0 28px;box-shadow:0 10px 30px rgba(0,174,239,.08);}
+    .alert-box strong{color:#fff;}
+    .contact-card{background:rgba(255,255,255,.03);border:1px solid rgba(0,174,239,.14);border-radius:18px;padding:22px;margin-top:18px;}
+    footer{padding:32px 7vw!important;border-top:1px solid rgba(0,174,239,.15)!important;background:rgba(4,13,24,.95)!important;}
+    .footer-inner{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+    .footer-logo,.footer-nav a{color:rgba(255,255,255,.7)!important;text-decoration:none;}
+    .footer-nav{display:flex;gap:16px;flex-wrap:wrap;}
+    .footer-nav a:hover{color:#00AEEF!important;}
+  </style>
 </head>
 <body>
   <header class="nav-header">
     <a href="index.html" class="nav-logo" aria-label="Pixen Home">
-      <img src="assets/logo.png" alt="Pixen" width="120" height="40" loading="eager" style="height:40px;width:auto;object-fit:contain;display:block;" />
+      <svg width="108" height="32" viewBox="0 0 108 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Pixen" style="display:block;height:32px;width:auto;">
+        <rect x="0" y="3" width="7" height="7" rx="1.5" fill="#00AEEF"/>
+        <rect x="9" y="3" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.65"/>
+        <rect x="0" y="12" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.65"/>
+        <rect x="9" y="12" width="7" height="7" rx="1.5" fill="#0070D1"/>
+        <rect x="0" y="21" width="7" height="7" rx="1.5" fill="#0070D1" opacity="0.4"/>
+        <rect x="9" y="21" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.35"/>
+        <text x="23" y="25" font-family="Outfit,sans-serif" font-weight="900" font-size="21" letter-spacing="-0.5" fill="white">PIXEN</text>
+      </svg>
     </a>
     <a href="index.html" class="nav-home-link">&larr; Back to Home</a>
   </header>
@@ -23,7 +58,11 @@
       <h2>Pixen Child Safety Standards Policy</h2>
       <p class="last-updated">Last Updated: June 2026</p>
 
-      <p>Pixen is committed to providing a safe environment for all users, especially children and young people. We maintain a zero-tolerance policy toward child sexual abuse, exploitation, grooming, and any content or behavior that endangers minors.</p>
+      <div class="alert-box">
+        <strong>Zero-tolerance policy:</strong> Pixen strictly prohibits child sexual abuse material, grooming, exploitation, trafficking, and any behavior or content that endangers minors.
+      </div>
+
+      <p>Pixen is committed to providing a safe environment for all users, especially children and young people. We maintain strict standards to detect, remove, and report harmful activity involving minors.</p>
 
       <h3>1. Our Commitment</h3>
       <p>Pixen strictly prohibits:</p>
@@ -36,20 +75,18 @@
         <li>Bullying, harassment, or abuse of children</li>
         <li>Any activity that threatens the safety or well-being of minors</li>
       </ul>
-      <p>Any violation of this policy may result in immediate content removal, account suspension, permanent account termination, and reporting to relevant law enforcement authorities.</p>
+      <p>Any violation may result in immediate content removal, account suspension, permanent account termination, and reporting to relevant law enforcement authorities.</p>
 
       <h3>2. Reporting Child Safety Concerns</h3>
-      <p>Users can report content, accounts, messages, or activities that may involve child exploitation or abuse. Reports can be submitted through:</p>
-      <ul>
-        <li>In-app reporting tools</li>
-        <li>Email support</li>
-      </ul>
-      <p>Child Safety Contact Email: <a href="mailto:pixen@nexuzy.in">pixen@nexuzy.in</a></p>
-      <p>Reports are reviewed as quickly as possible by our moderation team.</p>
+      <p>Users can report content, accounts, messages, or activities that may involve child exploitation or abuse through in-app reporting tools or by email.</p>
+      <div class="contact-card">
+        <p><strong>Child Safety Contact</strong></p>
+        <p>Email: <a href="mailto:pixen@nexuzy.in">pixen@nexuzy.in</a></p>
+        <p>Reports are reviewed as quickly as possible by our moderation team.</p>
+      </div>
 
       <h3>3. Detection and Enforcement</h3>
-      <p>Pixen may use a combination of user reports, automated moderation systems, and human review processes to identify and remove content that violates child safety standards.</p>
-      <p>We reserve the right to:</p>
+      <p>Pixen may use user reports, automated moderation systems, and human review to identify and remove content that violates child safety standards.</p>
       <ul>
         <li>Remove content without notice</li>
         <li>Restrict user access</li>
@@ -65,7 +102,6 @@
       <p>Pixen cooperates with relevant law enforcement agencies and child protection organizations when required by law. Where legally required, reports involving child exploitation, abuse, or CSAM may be referred to appropriate authorities.</p>
 
       <h3>6. User Responsibilities</h3>
-      <p>Users must:</p>
       <ul>
         <li>Respect the safety and privacy of minors.</li>
         <li>Never upload, share, request, or distribute exploitative content.</li>
@@ -74,15 +110,9 @@
       </ul>
 
       <h3>7. Educational and Preventive Measures</h3>
-      <p>Pixen supports efforts to:</p>
-      <ul>
-        <li>Prevent online child exploitation.</li>
-        <li>Promote responsible digital behavior.</li>
-        <li>Improve platform safety through moderation and reporting tools.</li>
-      </ul>
+      <p>Pixen supports efforts to prevent online child exploitation, promote responsible digital behavior, and improve platform safety through moderation and reporting tools.</p>
 
       <h3>8. Policy Violations</h3>
-      <p>Violations of this Child Safety Standards Policy may result in:</p>
       <ul>
         <li>Content removal</li>
         <li>Account restrictions</li>
@@ -92,10 +122,11 @@
       </ul>
 
       <h3>9. Contact Information</h3>
-      <p>For child safety concerns, abuse reports, or policy questions:</p>
-      <p><strong>Pixen Child Safety Team</strong><br />
-      Email: <a href="mailto:pixen@nexuzy.in">pixen@nexuzy.in</a><br />
-      Developer: Nexuzy Lab</p>
+      <div class="contact-card">
+        <p><strong>Pixen Child Safety Team</strong></p>
+        <p>Email: <a href="mailto:pixen@nexuzy.in">pixen@nexuzy.in</a></p>
+        <p>Developer: Nexuzy Lab</p>
+      </div>
 
       <p class="legal-acknowledgement">Pixen is committed to maintaining a safe platform and protecting children from abuse, exploitation, and harmful content.</p>
     </div>
