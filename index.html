@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pixen – The Next Generation Social Media Experience</title>
+  <meta name="description" content="Share photos, videos, stories and moments with Pixen. A beautiful social experience designed for creators, friends and communities." />
+  <meta name="keywords" content="Pixen, Pixen App, Photo Sharing, Video Sharing, Reels, Stories, Social Media App, Creator Platform, Instagram Alternative, Messaging App, Video Call App" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div id="cursor"></div>
+  <main>
+    <!-- SECTION 1: HERO -->
+    <section id="hero" class="section hero">
+      <canvas id="hero-bg"></canvas>
+      <div class="hero-inner">
+        <div class="hero-left glass-card">
+          <h1 class="brand">PIXEN</h1>
+          <h2 class="hero-title">Share Life.<br>Create Stories.<br>Connect Instantly.</h2>
+          <div class="hero-actions">
+            <a href="#download" class="btn primary">Download App</a>
+            <button class="btn ghost" id="watch-preview">Watch Preview</button>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div id="hero-phone" class="phone-3d-holder">
+            <!-- Three.js phone canvas injected by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: FLOATING SOCIAL UNIVERSE -->
+    <section id="social-universe" class="section dark">
+      <div class="section-bg section-bg--particles"></div>
+      <div class="section-content">
+        <h2>Every Moment Matters</h2>
+        <p>Millions of photos, videos and stories shared beautifully.</p>
+        <div id="social-universe-3d" class="three-holder"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: 3D PHONE EXPLOSION -->
+    <section id="phone-explosion" class="section">
+      <div class="section-content">
+        <h2>Pixen In Motion</h2>
+        <p>Scroll to reveal the Pixen experience across feed, stories, reels, messaging and more.</p>
+      </div>
+      <div id="phone-explosion-3d" class="three-holder"></div>
+    </section>
+
+    <!-- SECTION 4: FEATURE GALAXY -->
+    <section id="feature-galaxy" class="section dark">
+      <div class="section-content">
+        <h2>Feature Galaxy</h2>
+        <p>Everything you need to share, connect and grow in one orbit.</p>
+      </div>
+      <div class="feature-orbit">
+        <div class="feature-center glass-card">Pixen</div>
+        <div class="feature-orbit-ring">
+          <button class="feature-card">📸 Photos</button>
+          <button class="feature-card">🎥 Videos</button>
+          <button class="feature-card">⚡ Reels</button>
+          <button class="feature-card">💬 Messaging</button>
+          <button class="feature-card">📞 Calls</button>
+          <button class="feature-card">🎦 Video Calls</button>
+          <button class="feature-card">🔍 Explore</button>
+          <button class="feature-card">🛡 Privacy</button>
+          <button class="feature-card">✨ AI Moderation</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: REELS SHOWCASE -->
+    <section id="reels-showcase" class="section">
+      <div class="section-content">
+        <h2>Create. Share. Go Viral.</h2>
+        <p>Vertical reels, immersive viewing and a canvas built for creators.</p>
+      </div>
+      <div class="phone-stack" id="reels-stack"></div>
+    </section>
+
+    <!-- SECTION 6: MESSAGING EXPERIENCE -->
+    <section id="messaging" class="section dark">
+      <div class="section-content">
+        <h2>Messaging, Reinvented</h2>
+        <p>Fast chats, rich media, crystal-clear voice and video calls with wave animations.</p>
+      </div>
+      <div class="messaging-visual" id="messaging-visual"></div>
+    </section>
+
+    <!-- SECTION 7: SECURITY CHAMBER -->
+    <section id="security" class="section">
+      <div class="section-content">
+        <h2>Security Chamber</h2>
+        <p>Privacy-first architecture, secure communication and AI-powered protection.</p>
+        <ul class="pill-list">
+          <li>Privacy First</li>
+          <li>Secure Communication</li>
+          <li>AI Protection</li>
+          <li>Content Safety</li>
+          <li>Spam Prevention</li>
+        </ul>
+      </div>
+      <div id="security-shield" class="three-holder"></div>
+    </section>
+
+    <!-- SECTION 8: CREATOR UNIVERSE -->
+    <section id="creator" class="section dark">
+      <div class="section-content">
+        <h2>Creator Universe</h2>
+        <p>Live analytics, engagement graphs and insights to grow your audience.</p>
+      </div>
+      <div class="analytics-grid" id="creator-dashboard"></div>
+    </section>
+
+    <!-- SECTION 9: COMMUNITY SECTION -->
+    <section id="community" class="section">
+      <div class="section-content">
+        <h2>Built For Everyone</h2>
+        <p>Creators. Students. Friends. Communities. Businesses.</p>
+      </div>
+      <div id="community-earth" class="three-holder"></div>
+    </section>
+
+    <!-- SECTION 10: DOWNLOAD SECTION -->
+    <section id="download" class="section dark download-section">
+      <div class="section-content">
+        <h2>Download Pixen Today</h2>
+        <p>Experience the next generation social media platform built for speed, beauty and connection.</p>
+        <div class="download-actions">
+          <a href="#" class="btn primary">Google Play</a>
+          <a href="#" class="btn ghost">APK Download</a>
+          <div class="qr-card glass-card">
+            <div class="qr-placeholder">QR</div>
+            <span>Scan to download</span>
+          </div>
+        </div>
+      </div>
+      <div id="download-phone" class="phone-3d-holder"></div>
+    </section>
+
+    <!-- SECTION 11: FOOTER -->
+    <footer class="footer glass-card">
+      <div class="footer-inner">
+        <div class="footer-logo">Pixen</div>
+        <nav class="footer-nav">
+          <a href="index.html">Home</a>
+          <a href="#feature-galaxy">Features</a>
+          <a href="privacy-policy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="community-guidelines.html">Community Guidelines</a>
+          <a href="child-safety.html">Child Safety</a>
+          <a href="account-deletion.html">Account Deletion</a>
+          <a href="#community">Support</a>
+          <a href="#download">Contact</a>
+        </nav>
+      </div>
+    </footer>
+  </main>
+
+  <script src="https://unpkg.com/lenis@1.0.19/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
