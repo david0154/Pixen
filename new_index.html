@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixen – The Next Generation Social Media Experience</title>
+<meta name="description" content="Share photos, videos, stories and moments with Pixen. A beautiful social experience designed for creators, friends and communities.">
+<meta name="keywords" content="Pixen, Pixen App, Photo Sharing, Video Sharing, Reels, Stories, Social Media App, Creator Platform, Instagram Alternative, Messaging App, Video Call App">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --sky: #00AEEF;
+    --dark-blue: #0070D1;
+    --deep: #071320;
+    --white: #FFFFFF;
+    --glass: rgba(255,255,255,0.07);
+    --glass-border: rgba(255,255,255,0.12);
+    --glow: rgba(0,174,239,0.4);
+  }
+
+  *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  #cursor {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--sky);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+    mix-blend-mode: screen;
+  }
+  #cursor-trail {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--sky);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+    opacity: 0.5;
+  }
+  body:hover #cursor { opacity: 1; }
+
+  /* Navbar */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(7,19,32,0.6);
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    background: linear-gradient(135deg, var(--sky), var(--white));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s;
+    letter-spacing: 0.3px;
+  }
+  .nav-links a:hover { color: var(--sky); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--sky), var(--dark-blue));
+    color: white !important;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 600 !important;
+    box-shadow: 0 0 20px var(--glow);
+    transition: box-shadow 0.3s !important;
+  }
+  .nav-cta:hover { box-shadow: 0 0 40px var(--glow) !important; color: white !important; }
+
+  /* Canvas */
+  #hero-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+
+  /* SECTION 1 - HERO */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 30% 50%, rgba(0,174,239,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 20%, rgba(0,112,209,0.1) 0%, transparent 50%),
+                var(--deep);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    padding: 0 60px;
+    max-width: 600px;
+    margin-top: 80px;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sky);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    backdrop-filter: blur(10px);
+  }
+  .hero-eyebrow span { width: 6px; height: 6px; background: var(--sky); border-radius: 50%; animation: pulse-dot 2s infinite; }
+  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.5)} }
+
+  .hero-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: clamp(52px, 7vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -3px;
+    margin-bottom: 24px;
+  }
+  .hero-title .gradient-text {
+    background: linear-gradient(135deg, var(--sky) 0%, #fff 50%, var(--dark-blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 4s ease infinite;
+  }
+  @keyframes gradient-shift {
+    0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
+  }
+  .hero-sub {
+    font-size: 18px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 40px;
+    font-weight: 400;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--sky), var(--dark-blue));
+    color: white;
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 40px var(--glow), 0 4px 30px rgba(0,0,0,0.3);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover { box-shadow: 0 0 60px var(--glow), 0 8px 40px rgba(0,0,0,0.4); transform: translateY(-2px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: var(--sky);
+    box-shadow: 0 0 20px var(--glow);
+    transform: translateY(-2px);
+  }
+
+  .hero-phone-wrapper {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 500px;
+    height: 700px;
+    z-index: 5;
+  }
+
+  /* Phone 3D */
+  .phone-3d {
+    width: 280px;
+    height: 580px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,174,239,0.05));
+    border-radius: 44px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    box-shadow:
+      0 0 0 1px rgba(0,174,239,0.15),
+      0 30px 80px rgba(0,0,0,0.6),
+      0 0 100px rgba(0,174,239,0.2),
+      inset 0 1px 0 rgba(255,255,255,0.15);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    transform-style: preserve-3d;
+    margin: auto;
+    animation: float-phone 6s ease-in-out infinite;
+  }
+  @keyframes float-phone {
+    0%,100%{transform:translateY(0) rotateX(5deg) rotateY(-10deg)}
+    50%{transform:translateY(-20px) rotateX(3deg) rotateY(-8deg)}
+  }
+  .phone-notch {
+    width: 120px; height: 30px;
+    background: rgba(0,0,0,0.8);
+    border-radius: 0 0 20px 20px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .phone-screen {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 44px;
+  }
+  .phone-screen-bg {
+    width: 100%; height: 100%;
+    background: linear-gradient(180deg, #071320 0%, #0a1f35 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .phone-ui-post {
+    margin: 50px 12px 10px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    animation: slide-posts 8s ease-in-out infinite;
+  }
+  .phone-ui-post img { width: 100%; height: 140px; object-fit: cover; }
+  .phone-post-img {
+    width: 100%; height: 140px;
+    background: linear-gradient(135deg, rgba(0,174,239,0.3), rgba(0,112,209,0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+  }
+  .phone-post-meta {
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .phone-post-avatar {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sky), var(--dark-blue));
+  }
+  .phone-post-actions {
+    display: flex;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .phone-status-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 600;
+    z-index: 10;
+  }
+  .phone-bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 20px 24px;
+    background: rgba(7,19,32,0.9);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-around;
+    font-size: 18px;
+  }
+
+  /* Floating particles */
+  .particle-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--sky);
+    opacity: 0.15;
+    animation: drift linear infinite;
+  }
+  @keyframes drift {
+    0%{transform:translateY(100vh) translateX(0) scale(0)}
+    50%{opacity:0.3}
+    100%{transform:translateY(-100px) translateX(40px) scale(1)}
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    gap: 0;
+    margin-top: 60px;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 40px;
+  }
+  .stat-item {
+    flex: 1;
+    text-align: center;
+    padding: 20px;
+    border-right: 1px solid var(--glass-border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--sky);
+    display: block;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+  }
+
+  /* SECTIONS GENERAL */
+  section {
+    position: relative;
+    overflow: hidden;
+  }
+  .section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+  .section-pad { padding: 120px 0; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sky);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+  }
+  .section-body {
+    font-size: 18px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.8;
+    max-width: 540px;
+  }
+
+  /* SECTION 2 - SOCIAL UNIVERSE */
+  #social-universe {
+    background: linear-gradient(180deg, var(--deep) 0%, #020a14 50%, var(--deep) 100%);
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+  }
+  .universe-canvas-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .floating-icons-layer {
+    position: absolute;
+    inset: 0;
+  }
+  .fi {
+    position: absolute;
+    font-size: 28px;
+    opacity: 0.7;
+    animation: float-icon ease-in-out infinite;
+    filter: drop-shadow(0 0 12px var(--sky));
+  }
+  @keyframes float-icon {
+    0%,100%{transform:translateY(0) rotate(0deg);opacity:0.4}
+    50%{transform:translateY(-30px) rotate(10deg);opacity:0.8}
+  }
+  .neon-line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--sky), transparent);
+    opacity: 0.3;
+    animation: line-pulse 3s ease-in-out infinite;
+  }
+  @keyframes line-pulse { 0%,100%{opacity:0.1} 50%{opacity:0.4} }
+  .universe-text {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 120px 60px;
+    width: 100%;
+  }
+  .universe-text .section-title {
+    font-size: clamp(48px, 7vw, 90px);
+    background: linear-gradient(135deg, var(--white), var(--sky));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .universe-text .section-body {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* SECTION 3 - FEATURE EXPLOSION */
+  #features-explosion {
+    background: var(--deep);
+    padding: 120px 0;
+  }
+  .explosion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .exploded-screens {
+    position: relative;
+    height: 600px;
+  }
+  .mini-screen {
+    position: absolute;
+    width: 160px;
+    height: 280px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(0,174,239,0.03));
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(0,174,239,0.1);
+    transition: transform 0.4s, box-shadow 0.4s;
+  }
+  .mini-screen:hover {
+    transform: translateY(-15px) scale(1.05) !important;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 50px rgba(0,174,239,0.25) !important;
+  }
+  .mini-screen-header {
+    height: 40px;
+    background: rgba(0,174,239,0.15);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 6px;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--sky);
+  }
+  .mini-screen-content {
+    padding: 12px;
+  }
+  .mini-bar { height: 8px; border-radius: 4px; background: rgba(255,255,255,0.08); margin-bottom: 8px; }
+  .mini-bar.sky { background: rgba(0,174,239,0.3); }
+  .mini-thumb {
+    width: 100%; height: 100px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(0,174,239,0.2), rgba(0,112,209,0.1));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  .mini-screen-1 { top: 30px; left: 20px; transform: rotate(-8deg); animation: screen-float-1 7s ease-in-out infinite; }
+  .mini-screen-2 { top: 0; left: 180px; transform: rotate(3deg); animation: screen-float-2 6s ease-in-out infinite; }
+  .mini-screen-3 { top: 100px; left: 340px; transform: rotate(-4deg); animation: screen-float-3 8s ease-in-out infinite; }
+  .mini-screen-4 { top: 300px; left: 60px; transform: rotate(6deg); animation: screen-float-2 7s ease-in-out infinite 1s; }
+  .mini-screen-5 { top: 320px; left: 230px; transform: rotate(-5deg); animation: screen-float-1 6s ease-in-out infinite 0.5s; }
+  @keyframes screen-float-1 { 0%,100%{transform:rotate(-8deg) translateY(0)} 50%{transform:rotate(-6deg) translateY(-15px)} }
+  @keyframes screen-float-2 { 0%,100%{transform:rotate(3deg) translateY(0)} 50%{transform:rotate(5deg) translateY(-20px)} }
+  @keyframes screen-float-3 { 0%,100%{transform:rotate(-4deg) translateY(0)} 50%{transform:rotate(-2deg) translateY(-12px)} }
+
+  /* SECTION 4 - FEATURE GALAXY ORBIT */
+  #feature-galaxy {
+    background: radial-gradient(ellipse at center, rgba(0,174,239,0.08) 0%, transparent 60%), var(--deep);
+    padding: 120px 0;
+  }
+  .orbit-system {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    margin: 60px auto 0;
+  }
+  .orbit-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px; height: 100px;
+    background: linear-gradient(135deg, var(--sky), var(--dark-blue));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    box-shadow: 0 0 60px var(--glow), 0 0 120px rgba(0,174,239,0.2);
+    z-index: 10;
+    animation: center-pulse 3s ease-in-out infinite;
+  }
+  @keyframes center-pulse {
+    0%,100%{box-shadow:0 0 60px var(--glow),0 0 120px rgba(0,174,239,0.2)}
+    50%{box-shadow:0 0 90px var(--glow),0 0 180px rgba(0,174,239,0.3)}
+  }
+  .orbit-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    border-radius: 50%;
+    border: 1px solid rgba(0,174,239,0.15);
+    transform: translate(-50%, -50%);
+  }
+  .orbit-ring-1 { width: 220px; height: 220px; animation: spin 15s linear infinite; }
+  .orbit-ring-2 { width: 380px; height: 380px; animation: spin 25s linear infinite reverse; }
+  .orbit-ring-3 { width: 540px; height: 540px; animation: spin 35s linear infinite; }
+  @keyframes spin { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
+
+  .orbit-card {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 80px; height: 80px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  .orbit-card span {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--sky);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .orbit-card:hover {
+    background: rgba(0,174,239,0.15);
+    border-color: var(--sky);
+    box-shadow: 0 0 30px var(--glow);
+    transform: translate(-50%, -50%) scale(1.2) !important;
+  }
+
+  /* SECTION 5 - REELS */
+  #reels-section {
+    background: linear-gradient(180deg, var(--deep) 0%, #030d1a 100%);
+    padding: 120px 0;
+    overflow: hidden;
+  }
+  .reels-showcase {
+    position: relative;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    height: 600px;
+    perspective: 1000px;
+  }
+  .reel-phone {
+    width: 200px;
+    height: 380px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(0,174,239,0.02));
+    border-radius: 32px;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    transition: transform 0.4s;
+  }
+  .reel-phone:hover { transform: scale(1.05) translateY(-10px); }
+  .reel-phone.center-reel {
+    width: 240px;
+    height: 460px;
+    border-color: var(--sky);
+    box-shadow: 0 0 40px var(--glow), 0 25px 80px rgba(0,0,0,0.6);
+    z-index: 5;
+    animation: reel-float 5s ease-in-out infinite;
+  }
+  .reel-phone.side-reel-1 { transform: rotateY(15deg) translateX(20px) translateZ(-50px); opacity: 0.8; }
+  .reel-phone.side-reel-2 { transform: rotateY(-15deg) translateX(-20px) translateZ(-50px); opacity: 0.8; }
+  .reel-phone.far-reel-1 { transform: rotateY(25deg) translateX(40px) translateZ(-100px); opacity: 0.5; }
+  .reel-phone.far-reel-2 { transform: rotateY(-25deg) translateX(-40px) translateZ(-100px); opacity: 0.5; }
+  @keyframes reel-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+  .reel-bg {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 60px;
+    position: relative;
+  }
+  .reel-bg-1 { background: linear-gradient(180deg, #1a0a2e, #0d1f4a); }
+  .reel-bg-2 { background: linear-gradient(180deg, #071320, #0a2535); }
+  .reel-bg-3 { background: linear-gradient(180deg, #0a0a2e, #071a35); }
+  .reel-bg-4 { background: linear-gradient(180deg, #071320, #102030); }
+  .reel-bg-5 { background: linear-gradient(180deg, #0d1a2e, #071320); }
+  .reel-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 16px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  }
+  .reel-username { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+  .reel-caption { font-size: 9px; color: rgba(255,255,255,0.6); }
+  .reel-actions {
+    position: absolute;
+    right: 10px;
+    bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    font-size: 20px;
+  }
+  .reel-actions span { font-size: 9px; font-weight: 600; }
+
+  /* SECTION 6 - MESSAGING */
+  #messaging {
+    background: var(--deep);
+    padding: 120px 0;
+  }
+  .messaging-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .chat-demo {
+    position: relative;
+    height: 500px;
+    perspective: 800px;
+  }
+  .chat-bubble {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    max-width: 260px;
+    position: absolute;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    animation: bubble-appear 0.5s ease forwards;
+  }
+  .cb-received {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px 20px 20px 4px;
+    color: white;
+  }
+  .cb-sent {
+    background: linear-gradient(135deg, var(--sky), var(--dark-blue));
+    border-radius: 20px 20px 4px 20px;
+    color: white;
+    text-align: right;
+    margin-left: auto;
+    right: 0;
+  }
+  @keyframes bubble-appear { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .wave-viz {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 12px 20px;
+    backdrop-filter: blur(10px);
+  }
+  .wave-bar {
+    width: 3px;
+    background: var(--sky);
+    border-radius: 2px;
+    animation: wave-anim 1s ease-in-out infinite;
+  }
+  @keyframes wave-anim {
+    0%,100%{height:6px} 50%{height:28px}
+  }
+  .feature-list {
+    list-style: none;
+    margin-top: 40px;
+  }
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+  }
+  .feature-list li:hover {
+    background: rgba(0,174,239,0.08);
+    border-color: rgba(0,174,239,0.3);
+    transform: translateX(8px);
+  }
+  .fl-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--sky), var(--dark-blue));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .fl-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .fl-body { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+  /* SECTION 7 - SECURITY */
+  #security {
+    background: radial-gradient(ellipse at center, rgba(0,112,209,0.1) 0%, transparent 60%),
+                linear-gradient(180deg, var(--deep), #020d1a);
+    padding: 140px 0;
+  }
+  .security-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .shield-3d {
+    position: relative;
+    width: 300px;
+    height: 360px;
+    margin: 0 auto;
+  }
+  .shield-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 30px rgba(0,174,239,0.4));
+    animation: shield-rotate 8s ease-in-out infinite;
+  }
+  @keyframes shield-rotate {
+    0%,100%{transform:rotateY(0deg) rotateX(5deg)}
+    50%{transform:rotateY(15deg) rotateX(8deg)}
+  }
+  .shield-particles {
+    position: absolute;
+    inset: 0;
+  }
+  .sp {
+    position: absolute;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--sky);
+    animation: orbit-sp ease-in-out infinite;
+  }
+  @keyframes orbit-sp {
+    0%{transform:rotate(0deg) translateX(120px) rotate(0deg);opacity:0}
+    10%{opacity:1}
+    90%{opacity:1}
+    100%{transform:rotate(360deg) translateX(120px) rotate(-360deg);opacity:0}
+  }
+  .security-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .sec-feat {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+  }
+  .sec-feat:hover {
+    background: rgba(0,174,239,0.1);
+    border-color: rgba(0,174,239,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,174,239,0.15);
+  }
+  .sec-feat-icon { font-size: 28px; margin-bottom: 10px; }
+  .sec-feat-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .sec-feat-body { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+  /* SECTION 8 - CREATOR */
+  #creator {
+    background: var(--deep);
+    padding: 120px 0;
+  }
+  .dashboard-demo {
+    margin-top: 60px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 32px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4), 0 0 60px rgba(0,174,239,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  .dashboard-demo::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 20%; right: 20%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--sky), transparent);
+  }
+  .dashboard-top {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .dash-stat-card {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+  }
+  .dash-stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--sky);
+    display: block;
+  }
+  .dash-stat-label { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+  .graph-area {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 16px;
+    height: 160px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 16px;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+    gap: 6px;
+  }
+  .graph-bar {
+    flex: 1;
+    background: linear-gradient(to top, var(--sky), rgba(0,174,239,0.2));
+    border-radius: 4px 4px 0 0;
+    transition: height 0.5s;
+    position: relative;
+  }
+  .graph-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--sky), var(--dark-blue));
+    box-shadow: 0 0 10px var(--glow);
+  }
+
+  /* SECTION 9 - COMMUNITY */
+  #community {
+    background: radial-gradient(ellipse at center, rgba(0,174,239,0.06) 0%, transparent 60%), var(--deep);
+    padding: 120px 0;
+    text-align: center;
+  }
+  .globe-wrapper {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 60px auto;
+  }
+  #globe-canvas { width: 100%; height: 100%; }
+  .community-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  .ctag {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+    cursor: default;
+  }
+  .ctag:hover {
+    background: rgba(0,174,239,0.15);
+    border-color: var(--sky);
+    color: var(--sky);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,174,239,0.2);
+  }
+
+  /* SECTION 10 - DOWNLOAD */
+  #download {
+    background: radial-gradient(ellipse at center, rgba(0,174,239,0.2) 0%, transparent 60%),
+                linear-gradient(180deg, var(--deep), #030f1e);
+    padding: 140px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #download::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300AEEF' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .download-phone {
+    width: 200px;
+    height: 400px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(0,174,239,0.04));
+    border-radius: 40px;
+    border: 2px solid rgba(0,174,239,0.3);
+    box-shadow:
+      0 0 100px rgba(0,174,239,0.3),
+      0 0 200px rgba(0,174,239,0.1),
+      0 40px 100px rgba(0,0,0,0.5);
+    margin: 0 auto 60px;
+    position: relative;
+    overflow: hidden;
+    animation: dl-phone-float 5s ease-in-out infinite;
+  }
+  @keyframes dl-phone-float {
+    0%,100%{transform:translateY(0) scale(1)}
+    50%{transform:translateY(-20px) scale(1.02)}
+  }
+  .download-phone-inner {
+    width: 100%; height: 100%;
+    background: linear-gradient(180deg, #071320, #0a2535);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px;
+  }
+  .download-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .dl-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 14px 28px;
+    text-decoration: none;
+    color: white;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+    min-width: 180px;
+  }
+  .dl-btn:hover {
+    background: rgba(0,174,239,0.15);
+    border-color: var(--sky);
+    box-shadow: 0 0 30px var(--glow);
+    transform: translateY(-4px);
+  }
+  .dl-btn-icon { font-size: 32px; }
+  .dl-btn-text-small { font-size: 10px; color: rgba(255,255,255,0.6); }
+  .dl-btn-text-big { font-size: 16px; font-weight: 700; }
+  .qr-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+  }
+  .qr-visual {
+    width: 80px; height: 80px;
+    background: white;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .qr-svg { width: 70px; height: 70px; }
+  .qr-label { font-size: 11px; color: rgba(255,255,255,0.5); }
+
+  /* FOOTER */
+  footer {
+    background: rgba(7,19,32,0.95);
+    border-top: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+  }
+  .footer-top {
+    padding: 60px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .footer-brand p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 12px;
+    line-height: 1.7;
+    max-width: 300px;
+  }
+  .footer-col h4 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--sky);
+    margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 12px; }
+  .footer-col ul li a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  .footer-col ul li a:hover { color: var(--sky); }
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 60px;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bottom p { font-size: 13px; color: rgba(255,255,255,0.35); }
+
+  /* Scroll progress */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--sky), var(--dark-blue));
+    z-index: 9999;
+    transition: width 0.1s;
+    box-shadow: 0 0 10px var(--glow);
+  }
+
+  /* AOS-like animations */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s, transform 0.8s;
+  }
+  [data-reveal].revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  [data-reveal-delay="1"] { transition-delay: 0.1s; }
+  [data-reveal-delay="2"] { transition-delay: 0.2s; }
+  [data-reveal-delay="3"] { transition-delay: 0.3s; }
+  [data-reveal-delay="4"] { transition-delay: 0.4s; }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hero-content { padding: 0 20px; margin-top: 100px; }
+    .hero-phone-wrapper { display: none; }
+    .section-container { padding: 0 20px; }
+    .explosion-grid, .messaging-layout, .security-layout { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; padding: 40px 20px; gap: 30px; }
+    .footer-bottom { flex-direction: column; gap: 12px; padding: 20px; text-align: center; }
+    .reels-showcase .reel-phone:not(.center-reel) { display: none; }
+    .orbit-system { width: 340px; height: 340px; }
+  }
+
+  /* Glow rings animation */
+  .glow-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(0,174,239,0.1);
+    animation: expand-ring 4s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes expand-ring {
+    0%{transform:translate(-50%,-50%) scale(0.5);opacity:0.8}
+    100%{transform:translate(-50%,-50%) scale(2);opacity:0}
+  }
+
+  /* Gradient text */
+  .text-sky { color: var(--sky); }
+  .text-gradient {
+    background: linear-gradient(135deg, var(--sky), var(--white));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* === PIXEN ENHANCED 2D ANIMATIONS & HEAVY UI v2 === */
+  .morph-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;pointer-events:none;}
+  .morph-blob:nth-child(1){width:700px;height:700px;background:radial-gradient(circle,#00AEEF,#0070D1);top:-200px;left:-100px;animation:morphBlob 12s ease-in-out infinite alternate;}
+  .morph-blob:nth-child(2){width:500px;height:500px;background:radial-gradient(circle,#0070D1,#001f40);top:100px;right:-150px;animation:morphBlob 12s ease-in-out infinite alternate;animation-delay:-4s;}
+  .morph-blob:nth-child(3){width:400px;height:400px;background:radial-gradient(circle,#00AEEF,#003a5c);bottom:-100px;left:40%;animation:morphBlob 12s ease-in-out infinite alternate;animation-delay:-8s;}
+  @keyframes morphBlob{0%{transform:scale(1) translate(0,0);border-radius:60% 40% 70% 30% / 50% 60% 40% 70%}50%{transform:scale(1.1) translate(20px,-15px);border-radius:40% 60% 30% 70% / 60% 40% 70% 50%}100%{transform:scale(.95) translate(-10px,20px);border-radius:70% 30% 50% 50% / 40% 70% 60% 50%}}
+  .hero-grid-overlay{position:absolute;inset:0;z-index:2;pointer-events:none;background-image:linear-gradient(rgba(0,174,239,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,174,239,.04) 1px,transparent 1px);background-size:60px 60px;animation:gridPan 25s linear infinite;}
+  @keyframes gridPan{from{background-position:0 0}to{background-position:60px 60px}}
+  .phone-scanline{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,rgba(0,174,239,.7),transparent);z-index:20;animation:scanDown 3s linear infinite;border-radius:2px;}
+  @keyframes scanDown{0%{top:0%;opacity:1}90%{top:100%;opacity:.3}100%{top:0%;opacity:0}}
+  .phone-glow-ring{position:absolute;border-radius:50%;border:1px solid rgba(0,174,239,.18);animation:ringPulse 3s ease-out infinite;pointer-events:none;z-index:0;left:50%;top:50%;transform:translate(-50%,-50%);}
+  .phone-glow-ring:nth-child(1){width:320px;height:320px;animation-delay:0s}
+  .phone-glow-ring:nth-child(2){width:440px;height:440px;animation-delay:1s}
+  .phone-glow-ring:nth-child(3){width:560px;height:560px;animation-delay:2s}
+  @keyframes ringPulse{0%{transform:translate(-50%,-50%) scale(.8);opacity:.6}100%{transform:translate(-50%,-50%) scale(1.3);opacity:0}}
+  .stat-num{font-size:clamp(26px,3.5vw,42px)!important;font-weight:900!important;background:linear-gradient(135deg,#00AEEF,#fff 60%,#0070D1)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;font-family:'Outfit',sans-serif!important;letter-spacing:-1px;}
+  .stat-label{color:rgba(255,255,255,.5)!important;font-size:10px!important;letter-spacing:1.5px!important;text-transform:uppercase!important;margin-top:4px;}
+  .stat-item{border-right:1px solid rgba(0,174,239,.15)!important;}
+  .stat-item:last-child{border-right:none!important;}
+  nav{box-shadow:0 4px 30px rgba(0,0,0,.35)!important;border-bottom:1px solid rgba(0,174,239,.18)!important;}
+  [data-reveal]{opacity:0;transform:translateY(36px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1);}
+  [data-reveal-delay="1"]{transition-delay:.12s}[data-reveal-delay="2"]{transition-delay:.24s}[data-reveal-delay="3"]{transition-delay:.36s}
+  [data-reveal].revealed{opacity:1;transform:translateY(0)}
+  .section-label{text-shadow:0 0 20px rgba(0,174,239,.5);}
+  .sec-feat{background:linear-gradient(135deg,rgba(0,174,239,.05),rgba(0,0,0,0))!important;border:1px solid rgba(0,174,239,.1)!important;border-radius:16px!important;padding:16px!important;transition:all .3s!important;}
+  .sec-feat:hover{background:linear-gradient(135deg,rgba(0,174,239,.12),rgba(0,112,209,.05))!important;border-color:rgba(0,174,239,.35)!important;transform:translateY(-3px)!important;box-shadow:0 8px 30px rgba(0,174,239,.1)!important;}
+  .dl-btn{background:linear-gradient(135deg,rgba(0,174,239,.1),rgba(7,19,32,.85))!important;border:1px solid rgba(0,174,239,.3)!important;box-shadow:0 0 20px rgba(0,174,239,.1),0 8px 30px rgba(0,0,0,.4)!important;transition:all .3s!important;}
+  .dl-btn:hover{background:linear-gradient(135deg,rgba(0,174,239,.2),rgba(7,19,32,.9))!important;border-color:rgba(0,174,239,.6)!important;box-shadow:0 0 40px rgba(0,174,239,.2),0 12px 40px rgba(0,0,0,.5)!important;transform:translateY(-4px)!important;}
+  .scroll-ticker{overflow:hidden;white-space:nowrap;border-top:1px solid rgba(0,174,239,.1);border-bottom:1px solid rgba(0,174,239,.1);padding:12px 0;background:rgba(0,174,239,.03);margin:0;}
+  .scroll-ticker-inner{display:inline-block;animation:ticker 35s linear infinite;font-size:12px;font-weight:600;letter-spacing:2.5px;color:rgba(255,255,255,.25);text-transform:uppercase;}
+  @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .orbit-card{animation:orbitFloat 4.5s ease-in-out infinite;}
+  .orbit-card:nth-child(2){animation-delay:-.9s}.orbit-card:nth-child(3){animation-delay:-1.8s}.orbit-card:nth-child(4){animation-delay:-2.7s}.orbit-card:nth-child(5){animation-delay:-3.6s}
+  @keyframes orbitFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.01)}}
+  .phone-3d{box-shadow:0 0 0 1.5px rgba(0,174,239,.3),0 30px 80px rgba(0,0,0,.7),0 0 80px rgba(0,174,239,.18),inset 0 1px 0 rgba(255,255,255,.12)!important;}
+  #download{background:radial-gradient(ellipse at center bottom,rgba(0,174,239,.12) 0%,transparent 70%);}
+  #feature-galaxy{background:radial-gradient(ellipse at center,rgba(0,174,239,.07) 0%,transparent 70%);}
+  #security{background:radial-gradient(ellipse at 80% 50%,rgba(0,174,239,.07) 0%,transparent 60%);}
+  .download-phone-inner{font-size:80px!important;filter:drop-shadow(0 0 40px rgba(0,174,239,.6));animation:phoneFloat 3s ease-in-out infinite;}
+  @keyframes phoneFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-20px) rotate(5deg)}}
+  .btn-primary{background:linear-gradient(135deg,#00AEEF,#0070D1)!important;box-shadow:0 0 40px rgba(0,174,239,.35),0 4px 30px rgba(0,0,0,.3)!important;}
+  .btn-primary:hover{box-shadow:0 0 60px rgba(0,174,239,.5),0 8px 40px rgba(0,0,0,.4)!important;transform:translateY(-3px)!important;}
+
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
+<!-- Scroll Progress -->
+<div id="scroll-progress"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-logo" style="display:flex;align-items:center;">
+  <svg width="108" height="34" viewBox="0 0 108 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Pixen">
+    <rect x="0" y="3" width="7" height="7" rx="1.5" fill="#00AEEF"/>
+    <rect x="9" y="3" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.65"/>
+    <rect x="0" y="12" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.65"/>
+    <rect x="9" y="12" width="7" height="7" rx="1.5" fill="#0070D1"/>
+    <rect x="0" y="21" width="7" height="7" rx="1.5" fill="#0070D1" opacity="0.4"/>
+    <rect x="9" y="21" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.35"/>
+    <text x="23" y="25" font-family="Outfit,sans-serif" font-weight="900" font-size="21" letter-spacing="-0.5" fill="white">PIXEN</text>
+  </svg>
+</div>
+  <ul class="nav-links">
+    <li><a href="#social-universe">Features</a></li>
+    <li><a href="#reels-section">Reels</a></li>
+    <li><a href="#messaging">Messages</a></li>
+    <li><a href="#security">Privacy</a></li>
+    <li><a href="#community">Community</a></li>
+    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+    <li><a href="#download" class="nav-cta">Download</a></li>
+  </ul>
+</nav>
+
+<!-- SECTION 1: HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div style="position:absolute;inset:0;overflow:hidden;z-index:1;pointer-events:none;">
+    <div class="morph-blob"></div><div class="morph-blob"></div><div class="morph-blob"></div>
+  </div>
+  <div class="hero-grid-overlay"></div>
+  <div class="particle-field" id="particle-field"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow" data-reveal>
+      <span></span>
+      New Era of Social
+    </div>
+    <h1 class="hero-title" data-reveal data-reveal-delay="1">
+      <div class="gradient-text">Share Life.</div>
+      <div>Create</div>
+      <div class="gradient-text">Stories.</div>
+      <div>Connect.</div>
+    </h1>
+    <p class="hero-sub" data-reveal data-reveal-delay="2">
+      Pixen is the next generation social media — built for creators, friends, and communities who want more than just a feed.
+    </p>
+    <div class="hero-buttons" data-reveal data-reveal-delay="3">
+      <a href="#download" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download App
+      </a>
+      <a href="#social-universe" class="btn-secondary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        Watch Preview
+      </a>
+    </div>
+  </div>
+
+  <!-- 3D Phone -->
+  <div class="hero-phone-wrapper" id="hero-phone" style="position:relative;">
+  <div class="phone-glow-ring"></div><div class="phone-glow-ring"></div><div class="phone-glow-ring"></div>
+    <div class="phone-3d" id="phone-3d">
+      <div class="phone-screen">
+    <div class="phone-scanline"></div>
+        <div class="phone-screen-bg">
+          <div class="phone-status-bar">
+            <span>9:41</span>
+            <span>📶 🔋</span>
+          </div>
+          <div class="phone-notch"></div>
+          <div style="padding:8px 12px; display:flex; align-items:center; gap:8px; margin-top:8px;">
+            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#00AEEF,#0070D1);flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div style="font-size:11px;font-weight:700;">pixen_app</div>
+              <div style="font-size:9px;color:rgba(255,255,255,0.5);">Just now</div>
+            </div>
+            <div style="font-size:16px;">···</div>
+          </div>
+          <div class="phone-ui-post">
+            <div class="phone-post-img">🌅</div>
+            <div class="phone-post-meta">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div class="phone-post-avatar"></div>
+                <span style="font-size:10px;font-weight:600;">@creator</span>
+              </div>
+              <div class="phone-post-actions">
+                <span>❤️</span><span>💬</span><span>🔁</span>
+              </div>
+            </div>
+          </div>
+          <div style="padding:0 12px;">
+            <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:10px;margin-top:8px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#0070D1,#00AEEF);"></div>
+                <div style="font-size:10px;font-weight:700;">@traveler</div>
+              </div>
+              <div style="font-size:28px;text-align:center;padding:10px;">🎬</div>
+              <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:6px;">New Reel · 2.4K views</div>
+            </div>
+          </div>
+          <div class="phone-bottom-nav">
+            <span>🏠</span><span>🔍</span><span style="background:linear-gradient(135deg,#00AEEF,#0070D1);border-radius:8px;padding:2px 6px;">＋</span><span>🎬</span><span>👤</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Glow rings -->
+    <div class="glow-ring" style="width:350px;height:350px;top:50%;left:50%;animation-delay:0s;"></div>
+    <div class="glow-ring" style="width:350px;height:350px;top:50%;left:50%;animation-delay:1.3s;"></div>
+    <div class="glow-ring" style="width:350px;height:350px;top:50%;left:50%;animation-delay:2.6s;"></div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar" style="position:absolute;bottom:0;left:0;right:0;background:rgba(7,19,32,0.7);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06);">
+    <div class="stat-item">
+      <span class="stat-num" data-count="850">0</span>
+      <span class="stat-label">K+ Downloads</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-count="35">0</span>
+      <span class="stat-label">Countries Available</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-count="4.8">0</span>
+      <span class="stat-label">App Store Rating</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-count="2.5">0</span>
+      <span class="stat-label">Million+ Moments Shared</span>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: SOCIAL UNIVERSE -->
+<div class="scroll-ticker"><span class="scroll-ticker-inner">✦ Share Moments &nbsp;&nbsp;·&nbsp;&nbsp; Connect Worldwide &nbsp;&nbsp;·&nbsp;&nbsp; Create Stories &nbsp;&nbsp;·&nbsp;&nbsp; Explore Reels &nbsp;&nbsp;·&nbsp;&nbsp; Chat Encrypted &nbsp;&nbsp;·&nbsp;&nbsp; 35 Countries &nbsp;&nbsp;·&nbsp;&nbsp; 4.8 App Store Rating &nbsp;&nbsp;·&nbsp;&nbsp; Privacy First &nbsp;&nbsp;·&nbsp;&nbsp; Share Moments &nbsp;&nbsp;·&nbsp;&nbsp; Connect Worldwide &nbsp;&nbsp;·&nbsp;&nbsp; Create Stories &nbsp;&nbsp;·&nbsp;&nbsp; Explore Reels &nbsp;&nbsp;·&nbsp;&nbsp; Chat Encrypted &nbsp;&nbsp;·&nbsp;&nbsp; 35 Countries &nbsp;&nbsp;·&nbsp;&nbsp; 4.8 App Store Rating &nbsp;&nbsp;·&nbsp;&nbsp; Privacy First &nbsp;&nbsp;</span></div>
+<section id="social-universe">
+  <div class="floating-icons-layer" id="fi-layer"></div>
+  <div class="universe-text">
+    <div class="section-label" data-reveal>✦ Social Universe</div>
+    <h2 class="section-title" data-reveal data-reveal-delay="1">Every Moment<br>Matters</h2>
+    <p class="section-body" data-reveal data-reveal-delay="2">
+      Millions of photos, videos and stories shared beautifully — every second, every day, everywhere in the world.
+    </p>
+  </div>
+</section>
+
+<!-- SECTION 3: FEATURE EXPLOSION -->
+<section id="features-explosion">
+  <div class="section-container">
+    <div class="explosion-grid">
+      <div class="exploded-screens" data-reveal>
+        <div class="mini-screen mini-screen-1">
+          <div class="mini-screen-header">🏠 Home Feed</div>
+          <div class="mini-screen-content">
+            <div class="mini-thumb">📸</div>
+            <div class="mini-bar sky" style="width:80%;"></div>
+            <div class="mini-bar" style="width:60%;"></div>
+            <div class="mini-bar" style="width:40%;"></div>
+          </div>
+        </div>
+        <div class="mini-screen mini-screen-2">
+          <div class="mini-screen-header">📖 Stories</div>
+          <div class="mini-screen-content">
+            <div class="mini-thumb">🌟</div>
+            <div class="mini-bar sky" style="width:90%;"></div>
+            <div class="mini-bar" style="width:50%;"></div>
+          </div>
+        </div>
+        <div class="mini-screen mini-screen-3">
+          <div class="mini-screen-header">🎬 Reels</div>
+          <div class="mini-screen-content">
+            <div class="mini-thumb">⚡</div>
+            <div class="mini-bar sky" style="width:70%;"></div>
+            <div class="mini-bar" style="width:55%;"></div>
+          </div>
+        </div>
+        <div class="mini-screen mini-screen-4">
+          <div class="mini-screen-header">💬 Messages</div>
+          <div class="mini-screen-content">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="background:rgba(0,174,239,0.3);border-radius:8px 8px 8px 2px;padding:6px 8px;font-size:8px;">Hey! Love your reel 🔥</div>
+              <div style="background:rgba(255,255,255,0.06);border-radius:8px 8px 2px 8px;padding:6px 8px;font-size:8px;text-align:right;align-self:flex-end;">Thanks!! 😊</div>
+            </div>
+          </div>
+        </div>
+        <div class="mini-screen mini-screen-5">
+          <div class="mini-screen-header">🔍 Explore</div>
+          <div class="mini-screen-content">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+              <div style="height:50px;background:rgba(0,174,239,0.2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;">🏔</div>
+              <div style="height:50px;background:rgba(0,112,209,0.2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;">🌊</div>
+              <div style="height:50px;background:rgba(0,112,209,0.2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;">🎨</div>
+              <div style="height:50px;background:rgba(0,174,239,0.2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;">🎵</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-reveal data-reveal-delay="2">
+        <div class="section-label">✦ Everything You Need</div>
+        <h2 class="section-title">All your world,<br>one <span class="text-gradient">beautiful</span><br>app.</h2>
+        <p class="section-body">Home feed, Stories, Reels, Messages, Profile, Explore and Camera — each screen crafted with care, all working together seamlessly.</p>
+        <div style="margin-top:40px;display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--sky);flex-shrink:0;box-shadow:0 0 10px var(--sky);"></div>
+            <span style="font-size:15px;font-weight:600;">Stunning photo & video sharing</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--sky);flex-shrink:0;box-shadow:0 0 10px var(--sky);"></div>
+            <span style="font-size:15px;font-weight:600;">24-hour disappearing Stories</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--sky);flex-shrink:0;box-shadow:0 0 10px var(--sky);"></div>
+            <span style="font-size:15px;font-weight:600;">Short-form Reels to go viral</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--sky);flex-shrink:0;box-shadow:0 0 10px var(--sky);"></div>
+            <span style="font-size:15px;font-weight:600;">Real-time encrypted messaging</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: FEATURE GALAXY -->
+<section id="feature-galaxy">
+  <div class="section-container" style="text-align:center;">
+    <div class="section-label" data-reveal>✦ Feature Galaxy</div>
+    <h2 class="section-title" data-reveal data-reveal-delay="1">Everything orbits<br><span class="text-gradient">around you.</span></h2>
+    <p class="section-body" data-reveal data-reveal-delay="2" style="margin:0 auto;">Nine powerful features designed to give you the ultimate social experience.</p>
+
+    <div class="orbit-system" data-reveal data-reveal-delay="2">
+      <div class="orbit-ring orbit-ring-1"></div>
+      <div class="orbit-ring orbit-ring-2"></div>
+      <div class="orbit-ring orbit-ring-3"></div>
+      <div class="orbit-center">Pixen</div>
+      <!-- Orbit cards positioned via JS -->
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: REELS -->
+<section id="reels-section">
+  <div class="section-container" style="text-align:center;">
+    <div class="section-label" data-reveal>✦ Reels</div>
+    <h2 class="section-title" data-reveal data-reveal-delay="1">
+      Create. Share.<br><span class="text-gradient">Go Viral.</span>
+    </h2>
+    <p class="section-body" data-reveal data-reveal-delay="2" style="margin:0 auto;">Short-form video made beautifully. Record, edit, and share moments that captivate millions.</p>
+  </div>
+  <div class="reels-showcase" data-reveal data-reveal-delay="2">
+    <div class="reel-phone far-reel-2">
+      <div class="reel-bg reel-bg-4"><span>🎭</span></div>
+      <div class="reel-overlay"><div class="reel-username">@performer</div></div>
+    </div>
+    <div class="reel-phone side-reel-2">
+      <div class="reel-bg reel-bg-2"><span>🌿</span></div>
+      <div class="reel-overlay"><div class="reel-username">@nature_lens</div></div>
+    </div>
+    <div class="reel-phone center-reel">
+      <div class="reel-bg reel-bg-1"><span>🎵</span></div>
+      <div class="reel-actions">
+        <div>❤️<span>24K</span></div>
+        <div>💬<span>891</span></div>
+        <div>↗️<span>Share</span></div>
+      </div>
+      <div class="reel-overlay">
+        <div class="reel-username">@musicmaker</div>
+        <div class="reel-caption">This beat hits different 🎶 #viral #pixen</div>
+      </div>
+    </div>
+    <div class="reel-phone side-reel-1">
+      <div class="reel-bg reel-bg-3"><span>🏄</span></div>
+      <div class="reel-overlay"><div class="reel-username">@surf_life</div></div>
+    </div>
+    <div class="reel-phone far-reel-1">
+      <div class="reel-bg reel-bg-5"><span>🍜</span></div>
+      <div class="reel-overlay"><div class="reel-username">@foodie</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: MESSAGING -->
+<section id="messaging">
+  <div class="section-container">
+    <div class="messaging-layout">
+      <div class="chat-demo" data-reveal>
+        <div class="chat-bubble cb-received" style="top:40px;left:0;">
+          Hey! Did you see my new reel? 😊
+        </div>
+        <div class="chat-bubble cb-sent" style="top:110px;right:0;">
+          YES! It was absolutely amazing! 🔥🔥🔥
+        </div>
+        <div class="chat-bubble cb-received" style="top:195px;left:0;">
+          Thank you so much! I worked on it all week 🙏
+        </div>
+        <div class="chat-bubble cb-sent" style="top:268px;right:0;">
+          It totally shows! Can we collab? 🎬
+        </div>
+        <div class="chat-bubble cb-received" style="top:345px;left:0;">
+          100%! Let's hop on a video call soon! 📞
+        </div>
+        <div class="wave-viz">
+          <div class="wave-bar" style="height:6px;animation-delay:0s;"></div>
+          <div class="wave-bar" style="height:14px;animation-delay:0.1s;"></div>
+          <div class="wave-bar" style="height:22px;animation-delay:0.2s;"></div>
+          <div class="wave-bar" style="height:28px;animation-delay:0.15s;"></div>
+          <div class="wave-bar" style="height:18px;animation-delay:0.05s;"></div>
+          <div class="wave-bar" style="height:10px;animation-delay:0.25s;"></div>
+          <div class="wave-bar" style="height:24px;animation-delay:0.35s;"></div>
+          <div class="wave-bar" style="height:16px;animation-delay:0.2s;"></div>
+          <div class="wave-bar" style="height:28px;animation-delay:0.1s;"></div>
+          <div class="wave-bar" style="height:12px;animation-delay:0.3s;"></div>
+          <div class="wave-bar" style="height:8px;animation-delay:0s;"></div>
+          <div class="wave-bar" style="height:20px;animation-delay:0.4s;"></div>
+          <span style="font-size:12px;color:rgba(255,255,255,0.5);margin-left:8px;">Voice Call · 00:42</span>
+        </div>
+      </div>
+      <div data-reveal data-reveal-delay="2">
+        <div class="section-label">✦ Messaging</div>
+        <h2 class="section-title">Real connections,<br><span class="text-gradient">real conversations.</span></h2>
+        <p class="section-body">Chat, call, and video call your people — all beautifully encrypted and lightning fast.</p>
+        <ul class="feature-list" style="margin-top:32px;">
+          <li>
+            <div class="fl-icon">💬</div>
+            <div>
+              <div class="fl-title">Encrypted Messaging</div>
+              <div class="fl-body">End-to-end encryption keeps every conversation private and secure.</div>
+            </div>
+          </li>
+          <li>
+            <div class="fl-icon">📞</div>
+            <div>
+              <div class="fl-title">Crystal Clear Calls</div>
+              <div class="fl-body">HD voice calls with noise cancellation so every word comes through.</div>
+            </div>
+          </li>
+          <li>
+            <div class="fl-icon">🎦</div>
+            <div>
+              <div class="fl-title">Video Calls</div>
+              <div class="fl-body">Connect face-to-face with beautiful video quality anywhere.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: SECURITY -->
+<section id="security">
+  <div class="section-container">
+    <div class="security-layout">
+      <div data-reveal>
+        <div class="section-label">✦ Privacy & Security</div>
+        <h2 class="section-title">Your data.<br>Your <span class="text-gradient">rules.</span></h2>
+        <p class="section-body">We built Pixen with privacy at the core — not as an afterthought. Your information stays yours.</p>
+        <div class="security-features">
+          <div class="sec-feat">
+            <div class="sec-feat-icon">🔒</div>
+            <div class="sec-feat-title">Privacy First</div>
+            <div class="sec-feat-body">End-to-end encryption on all data</div>
+          </div>
+          <div class="sec-feat">
+            <div class="sec-feat-icon">🛡</div>
+            <div class="sec-feat-title">Secure Comms</div>
+            <div class="sec-feat-body">TLS encryption on all transmissions</div>
+          </div>
+          <div class="sec-feat">
+            <div class="sec-feat-icon">🤖</div>
+            <div class="sec-feat-title">AI Protection</div>
+            <div class="sec-feat-body">Smart moderation catches threats</div>
+          </div>
+          <div class="sec-feat">
+            <div class="sec-feat-icon">✅</div>
+            <div class="sec-feat-title">Content Safety</div>
+            <div class="sec-feat-body">Zero tolerance child safety policy</div>
+          </div>
+          <div class="sec-feat">
+            <div class="sec-feat-icon">🚫</div>
+            <div class="sec-feat-title">Spam Prevention</div>
+            <div class="sec-feat-body">AI-powered spam detection system</div>
+          </div>
+          <div class="sec-feat">
+            <div class="sec-feat-icon">👁</div>
+            <div class="sec-feat-title">No Data Sales</div>
+            <div class="sec-feat-body">We never sell your personal data</div>
+          </div>
+        </div>
+      </div>
+      <div class="shield-3d" data-reveal data-reveal-delay="2">
+        <svg class="shield-svg" viewBox="0 0 300 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sg1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00AEEF" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#0070D1" stop-opacity="0.3"/>
+            </linearGradient>
+            <linearGradient id="sg2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(0,174,239,0.4)"/>
+              <stop offset="100%" stop-color="rgba(0,112,209,0.05)"/>
+            </linearGradient>
+            <filter id="glow"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <!-- Shield shape -->
+          <path d="M150 20 L270 70 L270 180 C270 270 200 330 150 350 C100 330 30 270 30 180 L30 70 Z" fill="url(#sg2)" stroke="url(#sg1)" stroke-width="2" filter="url(#glow)"/>
+          <!-- Inner shield -->
+          <path d="M150 50 L240 88 L240 180 C240 250 195 300 150 318 C105 300 60 250 60 180 L60 88 Z" fill="rgba(0,174,239,0.05)" stroke="rgba(0,174,239,0.3)" stroke-width="1"/>
+          <!-- Lock icon -->
+          <rect x="118" y="170" width="64" height="54" rx="8" fill="rgba(0,174,239,0.3)" stroke="rgba(0,174,239,0.6)" stroke-width="2"/>
+          <path d="M130 170 L130 148 C130 130 170 130 170 148 L170 170" fill="none" stroke="rgba(0,174,239,0.7)" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="150" cy="197" r="8" fill="rgba(0,174,239,0.8)"/>
+          <rect x="148" y="200" width="4" height="12" rx="2" fill="rgba(0,174,239,0.8)"/>
+          <!-- Energy lines -->
+          <line x1="30" y1="130" x2="0" y2="130" stroke="rgba(0,174,239,0.4)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="270" y1="130" x2="300" y2="130" stroke="rgba(0,174,239,0.4)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="150" y1="20" x2="150" y2="0" stroke="rgba(0,174,239,0.4)" stroke-width="1" stroke-dasharray="4 4"/>
+        </svg>
+        <div class="shield-particles" id="shield-particles"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8: CREATOR -->
+<section id="creator">
+  <div class="section-container">
+    <div style="text-align:center;" data-reveal>
+      <div class="section-label">✦ Creator Universe</div>
+      <h2 class="section-title">Built for<br><span class="text-gradient">creators.</span></h2>
+      <p class="section-body" style="margin:0 auto;">Track your growth, understand your audience, and turn your passion into impact.</p>
+    </div>
+    <div class="dashboard-demo" data-reveal data-reveal-delay="2">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+        <div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:1px;text-transform:uppercase;">Creator Dashboard</div>
+          <div style="font-size:18px;font-weight:700;margin-top:4px;">@yourchannel</div>
+        </div>
+        <div style="background:rgba(0,174,239,0.15);border:1px solid rgba(0,174,239,0.3);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--sky);">This Month ▾</div>
+      </div>
+      <div class="dashboard-top">
+        <div class="dash-stat-card">
+          <span class="dash-stat-num" data-count="248">0</span>
+          <div class="dash-stat-label">New Followers</div>
+          <div style="font-size:10px;color:#22c55e;margin-top:4px;">↑ 12.4%</div>
+        </div>
+        <div class="dash-stat-card">
+          <span class="dash-stat-num" data-count="1.2">0</span>
+          <div class="dash-stat-label">Million Impressions</div>
+          <div style="font-size:10px;color:#22c55e;margin-top:4px;">↑ 8.7%</div>
+        </div>
+        <div class="dash-stat-card">
+          <span class="dash-stat-num" data-count="18">0</span>
+          <div class="dash-stat-label">Reels Posted</div>
+          <div style="font-size:10px;color:#22c55e;margin-top:4px;">↑ 3 new</div>
+        </div>
+        <div class="dash-stat-card">
+          <span class="dash-stat-num" data-count="6.8">0</span>
+          <div class="dash-stat-label">Engagement Rate %</div>
+          <div style="font-size:10px;color:#22c55e;margin-top:4px;">↑ 1.2%</div>
+        </div>
+      </div>
+      <div class="graph-area">
+        <div class="graph-line" style="bottom:80px;"></div>
+        <div class="graph-bar" style="height:40%;"></div>
+        <div class="graph-bar" style="height:55%;"></div>
+        <div class="graph-bar" style="height:45%;"></div>
+        <div class="graph-bar" style="height:70%;"></div>
+        <div class="graph-bar" style="height:60%;"></div>
+        <div class="graph-bar" style="height:80%;"></div>
+        <div class="graph-bar" style="height:65%;"></div>
+        <div class="graph-bar" style="height:90%;"></div>
+        <div class="graph-bar" style="height:75%;"></div>
+        <div class="graph-bar" style="height:85%;"></div>
+        <div class="graph-bar" style="height:95%;"></div>
+        <div class="graph-bar" style="height:88%;background:linear-gradient(to top, var(--sky), rgba(0,174,239,0.4));box-shadow:0 0 15px var(--sky);"></div>
+        <div style="position:absolute;top:10px;left:16px;font-size:11px;color:rgba(255,255,255,0.4);">Follower Growth · Last 30 Days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 9: COMMUNITY -->
+<section id="community">
+  <div class="section-container">
+    <div class="section-label" data-reveal style="text-align:center;">✦ Community</div>
+    <h2 class="section-title" data-reveal data-reveal-delay="1" style="text-align:center;">Built For<br><span class="text-gradient">Everyone.</span></h2>
+    <div class="globe-wrapper" data-reveal data-reveal-delay="2">
+      <canvas id="globe-canvas"></canvas>
+    </div>
+    <div class="community-tags" data-reveal data-reveal-delay="3">
+      <div class="ctag">🎨 Creators</div>
+      <div class="ctag">🎓 Students</div>
+      <div class="ctag">👫 Friends</div>
+      <div class="ctag">🏘 Communities</div>
+      <div class="ctag">💼 Businesses</div>
+      <div class="ctag">🎭 Artists</div>
+      <div class="ctag">🏃 Athletes</div>
+      <div class="ctag">🍽 Foodies</div>
+      <div class="ctag">✈️ Travelers</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 10: DOWNLOAD -->
+<section id="download">
+  <div class="section-container" style="position:relative;z-index:2;">
+    <div class="section-label" data-reveal style="text-align:center;">✦ Get Started</div>
+    <h2 class="section-title" data-reveal data-reveal-delay="1" style="text-align:center;font-size:clamp(48px,7vw,80px);">Download<br><span class="text-gradient">Pixen Today</span></h2>
+    <p class="section-body" data-reveal data-reveal-delay="2" style="margin:0 auto;text-align:center;">Join millions of creators and connect with the world. It's free.</p>
+
+    <div class="download-phone" data-reveal data-reveal-delay="1">
+      <div class="download-phone-inner">📱</div>
+    </div>
+
+    <div class="download-buttons" data-reveal data-reveal-delay="2">
+      <a href="#" class="dl-btn">
+        <div class="dl-btn-icon">▶</div>
+        <div>
+          <div class="dl-btn-text-small">Get it on</div>
+          <div class="dl-btn-text-big">Google Play</div>
+        </div>
+      </a>
+      <a href="#" class="dl-btn">
+        <div class="dl-btn-icon">📦</div>
+        <div>
+          <div class="dl-btn-text-small">Direct</div>
+          <div class="dl-btn-text-big">APK Download</div>
+        </div>
+      </a>
+      <div class="qr-box">
+        <div class="qr-visual">
+          <svg class="qr-svg" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+            <rect width="21" height="21" fill="white"/>
+            <rect x="1" y="1" width="7" height="7" fill="black"/>
+            <rect x="2" y="2" width="5" height="5" fill="white"/>
+            <rect x="3" y="3" width="3" height="3" fill="black"/>
+            <rect x="13" y="1" width="7" height="7" fill="black"/>
+            <rect x="14" y="2" width="5" height="5" fill="white"/>
+            <rect x="15" y="3" width="3" height="3" fill="black"/>
+            <rect x="1" y="13" width="7" height="7" fill="black"/>
+            <rect x="2" y="14" width="5" height="5" fill="white"/>
+            <rect x="3" y="15" width="3" height="3" fill="black"/>
+            <rect x="9" y="1" width="3" height="1" fill="black"/>
+            <rect x="10" y="3" width="1" height="3" fill="black"/>
+            <rect x="9" y="7" width="1" height="3" fill="black"/>
+            <rect x="11" y="9" width="3" height="1" fill="black"/>
+            <rect x="13" y="9" width="1" height="3" fill="black"/>
+            <rect x="9" y="11" width="3" height="1" fill="black"/>
+            <rect x="11" y="13" width="3" height="3" fill="black"/>
+            <rect x="15" y="11" width="5" height="1" fill="black"/>
+            <rect x="19" y="13" width="1" height="5" fill="black"/>
+            <rect x="13" y="15" width="5" height="1" fill="black"/>
+            <rect x="13" y="17" width="1" height="3" fill="black"/>
+            <rect x="15" y="17" width="3" height="3" fill="black"/>
+            <rect x="9" y="15" width="3" height="5" fill="black"/>
+          </svg>
+        </div>
+        <div class="qr-label">Scan to Download</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo" style="display:flex;align-items:center;">
+  <svg width="108" height="34" viewBox="0 0 108 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Pixen">
+    <rect x="0" y="3" width="7" height="7" rx="1.5" fill="#00AEEF"/>
+    <rect x="9" y="3" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.65"/>
+    <rect x="0" y="12" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.65"/>
+    <rect x="9" y="12" width="7" height="7" rx="1.5" fill="#0070D1"/>
+    <rect x="0" y="21" width="7" height="7" rx="1.5" fill="#0070D1" opacity="0.4"/>
+    <rect x="9" y="21" width="7" height="7" rx="1.5" fill="#00AEEF" opacity="0.35"/>
+    <text x="23" y="25" font-family="Outfit,sans-serif" font-weight="900" font-size="21" letter-spacing="-0.5" fill="white">PIXEN</text>
+  </svg>
+</div>
+      <p>The next generation social media experience. Share photos, videos, stories and moments beautifully.</p>
+      <p style="margin-top:12px;font-size:13px;">Made with ❤️ by <span style="color:var(--sky);">Nexuzy Lab</span></p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#feature-galaxy">Features</a></li>
+        <li><a href="#reels-section">Reels</a></li>
+        <li><a href="#messaging">Messaging</a></li>
+        <li><a href="#download">Download</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms & Conditions</a></li>
+        <li><a href="community-guidelines.html">Community Guidelines</a></li>
+        <li><a href="child-safety.html">Child Safety</a></li>
+        <li><a href="account-deletion.html">Account Deletion</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="mailto:pixen@nexuzy.in">Contact Us</a></li>
+        <li><a href="mailto:pixen@nexuzy.in">Support</a></li>
+        <li><a href="mailto:pixen@nexuzy.in">Report an Issue</a></li>
+        <li><a href="child-safety.html">Child Safety Report</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Pixen by Nexuzy Lab. All rights reserved.</p>
+    <p>Made with ☁️ and sky blue dreams.</p>
+  </div>
+</footer>
+
+<script>
+// =====================
+// CURSOR
+// =====================
+const cursor = document.getElementById('cursor');
+const cursorTrail = document.getElementById('cursor-trail');
+let mx = 0, my = 0, tx = 0, ty = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+function animateCursor() {
+  tx += (mx - tx) * 0.15;
+  ty += (my - ty) * 0.15;
+  cursorTrail.style.left = tx + 'px';
+  cursorTrail.style.top = ty + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+document.querySelectorAll('a, button, .orbit-card, .ctag, .sec-feat, .dl-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.width = '40px'; cursor.style.height = '40px'; });
+  el.addEventListener('mouseleave', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; });
+});
+
+// =====================
+// SCROLL PROGRESS
+// =====================
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('scroll-progress').style.width = pct + '%';
+});
+
+// =====================
+// HERO CANVAS - PARTICLES
+// =====================
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * 1920,
+      y: Math.random() * 1080,
+      r: Math.random() * 2 + 0.5,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      opacity: Math.random() * 0.5 + 0.1
+    });
+  }
+
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,174,239,${p.opacity})`;
+      ctx.fill();
+    });
+    // Connect nearby particles
+    particles.forEach((a, i) => {
+      particles.slice(i + 1).forEach(b => {
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(0,174,239,${0.08 * (1 - dist / 120)})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      });
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// =====================
+// PHONE MOUSE TRACKING
+// =====================
+const phone3d = document.getElementById('phone-3d');
+if (phone3d) {
+  document.addEventListener('mousemove', e => {
+    const rect = phone3d.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const rx = (e.clientY - cy) / 30;
+    const ry = -(e.clientX - cx) / 30;
+    phone3d.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+}
+
+// =====================
+// FLOATING ICONS - SECTION 2
+// =====================
+(function() {
+  const layer = document.getElementById('fi-layer');
+  if (!layer) return;
+  const icons = ['❤️','💬','📸','🎬','⚡','✨','🔥','💫','🌟','👑','🎵','🎭','🌈','💎','🚀'];
+  for (let i = 0; i < 25; i++) {
+    const el = document.createElement('div');
+    el.className = 'fi';
+    el.textContent = icons[Math.floor(Math.random() * icons.length)];
+    el.style.left = Math.random() * 100 + '%';
+    el.style.top = Math.random() * 100 + '%';
+    el.style.animationDuration = (4 + Math.random() * 6) + 's';
+    el.style.animationDelay = (Math.random() * 4) + 's';
+    el.style.fontSize = (18 + Math.random() * 24) + 'px';
+    layer.appendChild(el);
+  }
+  // Neon lines
+  for (let i = 0; i < 8; i++) {
+    const line = document.createElement('div');
+    line.className = 'neon-line';
+    line.style.left = Math.random() * 100 + '%';
+    line.style.top = Math.random() * 100 + '%';
+    line.style.width = (100 + Math.random() * 200) + 'px';
+    line.style.transform = `rotate(${Math.random() * 180}deg)`;
+    line.style.animationDelay = (Math.random() * 3) + 's';
+    layer.appendChild(line);
+  }
+})();
+
+// =====================
+// ORBIT CARDS
+// =====================
+(function() {
+  const system = document.querySelector('.orbit-system');
+  if (!system) return;
+  const features = [
+    { icon: '📸', label: 'Photos' },
+    { icon: '🎥', label: 'Videos' },
+    { icon: '⚡', label: 'Reels' },
+    { icon: '💬', label: 'Messages' },
+    { icon: '📞', label: 'Calls' },
+    { icon: '🎦', label: 'Video' },
+    { icon: '🔍', label: 'Explore' },
+    { icon: '🛡', label: 'Privacy' },
+    { icon: '✨', label: 'AI Guard' },
+  ];
+
+  const radii = [110, 190, 270];
+  const perRing = [3, 3, 3];
+  let fi = 0;
+  const cx = 300, cy = 300;
+
+  features.forEach((f, idx) => {
+    const ring = Math.floor(idx / 3);
+    const posInRing = idx % 3;
+    const radius = radii[ring];
+    const angle = (posInRing / perRing[ring]) * Math.PI * 2 - Math.PI / 2;
+    const x = cx + Math.cos(angle) * radius;
+    const y = cy + Math.sin(angle) * radius;
+
+    const card = document.createElement('div');
+    card.className = 'orbit-card';
+    card.innerHTML = `${f.icon}<span>${f.label}</span>`;
+    card.style.left = x + 'px';
+    card.style.top = y + 'px';
+    card.style.transform = 'translate(-50%, -50%)';
+    system.appendChild(card);
+  });
+
+  // Animate orbit cards
+  let startTime = Date.now();
+  function animateOrbit() {
+    const elapsed = (Date.now() - startTime) / 1000;
+    const cards = system.querySelectorAll('.orbit-card');
+    cards.forEach((card, idx) => {
+      const ring = Math.floor(idx / 3);
+      const posInRing = idx % 3;
+      const radius = radii[ring];
+      const speed = ring === 0 ? 0.3 : ring === 1 ? -0.2 : 0.15;
+      const baseAngle = (posInRing / 3) * Math.PI * 2 - Math.PI / 2;
+      const angle = baseAngle + elapsed * speed;
+      const x = cx + Math.cos(angle) * radius;
+      const y = cy + Math.sin(angle) * radius;
+      if (!card.matches(':hover')) {
+        card.style.left = x + 'px';
+        card.style.top = y + 'px';
+        card.style.transform = 'translate(-50%, -50%)';
+      }
+    });
+    requestAnimationFrame(animateOrbit);
+  }
+  animateOrbit();
+})();
+
+// =====================
+// SHIELD PARTICLES
+// =====================
+(function() {
+  const container = document.getElementById('shield-particles');
+  if (!container) return;
+  for (let i = 0; i < 8; i++) {
+    const sp = document.createElement('div');
+    sp.className = 'sp';
+    sp.style.top = '50%'; sp.style.left = '50%';
+    sp.style.animationDuration = (3 + Math.random() * 4) + 's';
+    sp.style.animationDelay = (i * 0.5) + 's';
+    sp.style.width = (3 + Math.random() * 4) + 'px';
+    sp.style.height = sp.style.width;
+    container.appendChild(sp);
+  }
+})();
+
+// =====================
+// GLOBE CANVAS
+// =====================
+(function() {
+  const canvas = document.getElementById('globe-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = 400; canvas.height = 400;
+  const cx = 200, cy = 200, r = 160;
+  let rotation = 0;
+  const dots = [];
+  for (let lat = -80; lat <= 80; lat += 15) {
+    for (let lon = 0; lon < 360; lon += 15) {
+      dots.push({ lat: lat * Math.PI / 180, lon: lon * Math.PI / 180 });
+    }
+  }
+  const pins = [
+    { lat: 40.7 * Math.PI / 180, lon: -74 * Math.PI / 180 },
+    { lat: 51.5 * Math.PI / 180, lon: -0.1 * Math.PI / 180 },
+    { lat: 35.7 * Math.PI / 180, lon: 139.7 * Math.PI / 180 },
+    { lat: 28.6 * Math.PI / 180, lon: 77.2 * Math.PI / 180 },
+    { lat: -33.9 * Math.PI / 180, lon: 151.2 * Math.PI / 180 },
+    { lat: 48.9 * Math.PI / 180, lon: 2.3 * Math.PI / 180 },
+    { lat: 1.3 * Math.PI / 180, lon: 103.8 * Math.PI / 180 },
+  ];
+
+  function project(lat, lon, rot) {
+    const adjustedLon = lon + rot;
+    const x = cx + r * Math.cos(lat) * Math.sin(adjustedLon);
+    const y = cy - r * Math.sin(lat);
+    const z = Math.cos(lat) * Math.cos(adjustedLon);
+    return { x, y, z };
+  }
+
+  function drawGlobe() {
+    ctx.clearRect(0, 0, 400, 400);
+    // Glow
+    const grd = ctx.createRadialGradient(cx, cy, r * 0.5, cx, cy, r);
+    grd.addColorStop(0, 'rgba(0,174,239,0.05)');
+    grd.addColorStop(1, 'rgba(0,174,239,0)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+    // Border
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(0,174,239,0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    // Dots
+    dots.forEach(d => {
+      const p = project(d.lat, d.lon, rotation);
+      if (p.z > 0) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0,174,239,${0.2 + p.z * 0.5})`;
+        ctx.fill();
+      }
+    });
+    // Pins
+    pins.forEach(pin => {
+      const p = project(pin.lat, pin.lon, rotation);
+      if (p.z > 0.1) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0,174,239,${0.6 + p.z * 0.4})`;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(0,174,239,${0.3 * p.z})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    });
+    rotation += 0.004;
+    requestAnimationFrame(drawGlobe);
+  }
+  drawGlobe();
+})();
+
+// =====================
+// SCROLL REVEAL
+// =====================
+const revealEls = document.querySelectorAll('[data-reveal]');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('revealed');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+revealEls.forEach(el => observer.observe(el));
+
+// =====================
+// COUNTER ANIMATION
+// =====================
+function animateCount(el, target, suffix = '') {
+  const isFloat = !Number.isInteger(target);
+  let start = 0;
+  const duration = 2000;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = eased * target;
+    el.textContent = isFloat ? current.toFixed(1) + suffix : Math.floor(current) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const target = parseFloat(e.target.dataset.count);
+      const labelText = e.target.parentElement?.querySelector('.stat-label')?.textContent||'';
+      const suffix = labelText.includes('Rating') ? '' : labelText.includes('K+') ? 'K+' : labelText.includes('M+')||labelText.includes('Million') ? 'M+' : labelText.includes('Billion') ? 'B+' : labelText.includes('Countries') ? '+' : '+';
+      animateCount(e.target, target, suffix);
+      counterObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+// =====================
+// SMOOTH SCROLL
+// =====================
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+
+// =====================
+// NAV ACTIVE STATE
+// =====================
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  nav.style.background = window.scrollY > 60 ? 'rgba(7,19,32,0.92)' : 'rgba(7,19,32,0.6)';
+});
+
+// Reveal hero elements immediately
+setTimeout(() => {
+  document.querySelectorAll('#hero [data-reveal]').forEach(el => el.classList.add('revealed'));
+}, 100);
+</script>
+</body>
+</html>
